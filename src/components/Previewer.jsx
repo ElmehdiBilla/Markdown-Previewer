@@ -1,15 +1,21 @@
 import { ArrowsAngleContract, ArrowsAngleExpand } from "react-bootstrap-icons"
+import { useDispatch, useSelector } from "react-redux";
+import { makeFullScreen } from "../store/store";
 
-function Previewer({settings , makeFullSc , html}) {
-    let isfullScreen = settings.fullscreen === 'pr' ? true : false;
-    const preview = settings.preview;
+function Previewer() {
+    const fullscreen = useSelector(state => state.settings.fullscreen)
+    const preview = useSelector(state => state.settings.preview);
+    const html = useSelector(state => state.html);
+    const dispatch = useDispatch();
+    let isfullScreen = fullscreen === 'preview' ? true : false;
 
     const fullSc = () => {
         isfullScreen = !isfullScreen
-        makeFullSc(isfullScreen ? 'pr' : '')
+        dispatch(makeFullScreen(isfullScreen ? 'preview' : ''))
     }
 
-    const className = `${!preview || settings.fullscreen === 'ed' ? 'hidden' : ''} ${isfullScreen ? 'fullscreen' : ''}`;
+
+    const className = `${!preview || fullscreen === 'editor' ? 'hidden' : ''} ${isfullScreen ? 'fullscreen' : ''}`;
 
     return (
     <div id="preview-container" className={className}>

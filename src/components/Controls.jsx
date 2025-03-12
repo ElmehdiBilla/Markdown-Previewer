@@ -1,35 +1,32 @@
-import { useState } from "react";
 import { CloudArrowDown, FiletypeHtml, FiletypeMd, ImageFill } from "react-bootstrap-icons"
+import { useDispatch } from "react-redux";
+import { download, togglePreview } from "../store/store";
+import { useState } from "react";
 
-function Controls({settings , changeSettings , download}) {
+function Controls() {
     const [downloadDropdown,setDownloadDropdown] = useState(false);
-    const preview = settings.preview;
+    const dispatch = useDispatch();
 
-    const togglePreview = () => {
-        const settings = {
-            preview : !preview
-        }
-        changeSettings(settings)
-    }
+    const toggleDropDown = () => {setDownloadDropdown(prevS => !prevS)}
 
     const downloadDropdownClassName = `downloads-centent ${!downloadDropdown ? 'hidden' : ''}`
 
     return (
         <div id="controls">
-            <button onClick={togglePreview}>
+            <button onClick={() => {dispatch(togglePreview())}}>
                 <ImageFill/>
             </button>
-            <div className="downloads-dropdown">
-                <button onClick={() => {setDownloadDropdown(prevS => !prevS)}}>
+            <div className="downloads-dropdown dropdown">
+                <button onClick={toggleDropDown} className="dropdown-toggle" >
                     <CloudArrowDown/>
                 </button>
                 <div className={downloadDropdownClassName}>
-                    <button onClick={() => {download('markdown') ; setDownloadDropdown(false)}}>
+                    <button onClick={() => {dispatch(download('markdown'))}}>
                         markdown
                         <FiletypeMd/>
                     </button>
                     <hr/>
-                    <button onClick={() => {download('html') ; setDownloadDropdown(false)}}>
+                    <button onClick={() => {dispatch(download('html'))}}>
                         HTML
                         <FiletypeHtml/>
                     </button>
